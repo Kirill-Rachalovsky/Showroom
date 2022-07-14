@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  pgdb:
+    image: postgres:14.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=showroom_db
+      - POSTGRES_USER=kirill
+      - POSTGRES_PASSWORD=password1234
+
+  web_app:
+    build: .
+    command: sh -c "
+      sleep 10 &&
+      python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000 &&
+      python manage.py createsuperuser"
+    volumes:
+      - .:/usr/src/app/
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_DB=showroom_db
+      - POSTGRES_USER=kirill
+      - POSTGRES_PASSWORD=password1234
+    depends_on:
+      - pgdb
+
+volumes:
+  postgres_data:

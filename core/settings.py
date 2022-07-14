@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,13 +19,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
+"""
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-olk0rou5*)91x2og($3n3^64fg6kw5!bos3ghwyr@e0q^(k+1n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+"""
+ALLOWED_HOSTS = ['*']
 
-ALLOWED_HOSTS = []
+
+SECRET_KEY = os.environ.get('APP_SECRET_KEY', 'unsafe-secret-key')
+
+# DEBUG = bool(os.environ.get('DJANGO_DEBUG', True) == 'False')
+DEBUG = True
+
+#ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split()
 
 
 # Application definition
@@ -79,11 +88,14 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.environ.get('POSTGRES_ENGINE', 'django.db.backends.postgresql_psycopg2'),
+        'NAME': os.environ.get('POSTGRES_DB', 'showroom_db'),
+        'USER': os.environ.get('POSTGRES_USER', 'kirill'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password1234'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'pgdb'),
+        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
