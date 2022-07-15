@@ -47,9 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_countries',
+    'djangorestframework',
     'dealer.apps.DealerConfig',
     'showroom.apps.ShowroomConfig',
     'customer.apps.CustomerConfig',
+    'transactions.apps.TransactionsConfig',
 ]
 
 MIDDLEWARE = [

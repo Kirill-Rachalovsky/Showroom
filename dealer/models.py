@@ -1,6 +1,8 @@
 from django.db import models
+from static.abstractmodels import *
+from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-import datetime
+from django.contrib.auth.models import AbstractUser
 
 
 class Car(models.Model):
@@ -40,10 +42,15 @@ class Car(models.Model):
     for r in range(2000, (datetime.datetime.now().year + 1)):
         YEAR_CHOICES.append((r, r))
 
+    brand = models.CharField(
+        'Car Brand',
+        max_length=50,
+        help_text="<i>Put the car's brand</i>"
+    )
     car_model = models.CharField(
         'Car Model',
         max_length=50,
-        help_text="<i>Put the car's name</i>"
+        help_text="<i>Put the car's model</i>"
     )
     description = models.TextField(
         blank=True,
@@ -54,35 +61,57 @@ class Car(models.Model):
         choices=BODY_CHOICES
     )
     year = models.IntegerField(
+        "Year",
         choices=YEAR_CHOICES,
         default=datetime.datetime.now().year,
-        verbose_name="Year"
     )
     transmission = models.IntegerField(
-        choices=TRANSMISSION_CHOICES,
-        verbose_name="Transmission"
+        "Transmission",
+        choices=TRANSMISSION_CHOICES
     )
     fuel = models.IntegerField(
+        'Fuel type',
         choices=FUEL_CHOICER,
-        verbose_name='Fuel type'
     )
     engine_capacity = models.FloatField(
-        verbose_name="Engine capacity",
+        "Engine capacity",
         null=True
     )
     mileage = models.IntegerField(
-        verbose_name="Car mileage",
+        "Car mileage",
         null=True
     )
     is_new_car = models.BooleanField(
-        default=False,
-        verbose_name="New car"
+        "New car",
+        default=False
     )
-    default_price = models.PositiveIntegerField(
+    color = models.CharField(max_length=25, verbose_name='Colour')
+    price = models.PositiveIntegerField(
         "Price",
-        validators=[MinValueValidator(1)],
+        validators=[MinValueValidator(0)],
         default=0,
         help_text="<i>Enter the price in dollars</i>"
+    )
+    showroom = models.ForeignKey(
+        "showroom.Showroom",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="showrooms_cars",
+    )
+    dealer = models.ForeignKey(
+        "Dealer",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="dealers_cars",
+    )
+    customer = models.ForeignKey(
+        "customer.Customer",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="customers_cars",
     )
     is_active = models.BooleanField(default=True)
 
@@ -94,50 +123,23 @@ class Car(models.Model):
         verbose_name_plural = "Cars"
 
 
-class Dealer(models.Model):
+class Dealer(OrganizationsMixin, DataMixin, IsActivMixin, models.Model):
     """Dealer"""
 
-    name = models.CharField(
-        max_length=50,
-        verbose_name='Name of dealer',
-        unique=True
-    )
-    description = models.TextField(
-        blank=True,
-        help_text='<i>More information about your company...</i>'
-    )
-    start_year = models.DateField(default=datetime.datetime.now().year)
-    slug = models.SlugField(max_length=100, unique=True)
-    cars = models.ManyToManyField(Car, verbose_name="Dealer's cars")
-    is_active = models.BooleanField(default=True)
+    user = models.OneToOneField(AbstractUser, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.organization_name
 
     class Meta:
         verbose_name = 'Dealer'
         verbose_name_plural = 'Dealers'
 
 
-class DealerDiscount(models.Model):
+class DealerDiscount(DiscountMixin, IsActivMixin, models.Model):
     """Discount"""
 
-    organization = models.ForeignKey(Dealer, on_delete=models.CASCADE)
-    amount = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(0)],
-        help_text='How many cars do I need to buy for the discount?'
-    )
-    discount = models.PositiveIntegerField(
-        default=1,
-        validators=[MaxValueValidator(100), MinValueValidator(1)],
-        help_text='Enter the size of the discount in percent',
-    )
-    data_start = models.DateField()
-    data_end = models.DateField(default=datetime.datetime.now().date() + datetime.timedelta(days=30))
-    is_active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f'Buy {self.amount} car to get a {self.discount}% discount!'
+    organization = models.ForeignKey('Dealer', on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Discount'
