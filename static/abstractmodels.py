@@ -13,7 +13,7 @@ class DataMixin(models.Model):
     data_update = models.DateTimeField(auto_now=True)
 
     class Meta:
-        abstract =True
+        abstract = True
 
 
 class IsActivMixin(models.Model):
@@ -23,7 +23,7 @@ class IsActivMixin(models.Model):
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        abstract =True
+        abstract = True
 
 
 class OrganizationsMixin(models.Model):
@@ -52,7 +52,7 @@ class OrganizationsMixin(models.Model):
     )
 
     class Meta:
-        abstract =True
+        abstract = True
 
 
 class CustomerMixin(models.Model):

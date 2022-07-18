@@ -37,6 +37,22 @@ class Car(models.Model):
         (5, 'Hybrid'),
     ]
 
+    COLOR_CHOICER = [
+        (None, "Select car's color"),
+        (1, 'Red'),
+        (2, 'Grey'),
+        (3, 'Light blue'),
+        (4, 'Dark blue'),
+        (5, 'Green'),
+        (6, 'Yellow'),
+        (7, 'Pink'),
+        (8, 'Orange'),
+        (9, 'Brown'),
+        (10, 'White'),
+        (11, 'Black'),
+        (12, 'Violet'),
+    ]
+
     YEAR_CHOICES = []
 
     for r in range(2000, (datetime.datetime.now().year + 1)):
@@ -85,7 +101,10 @@ class Car(models.Model):
         "New car",
         default=False
     )
-    color = models.CharField(max_length=25, verbose_name='Colour')
+    color = models.IntegerField(
+        'Color',
+        choices=COLOR_CHOICER,
+    )
     price = models.PositiveIntegerField(
         "Price",
         validators=[MinValueValidator(0)],
@@ -144,7 +163,4 @@ class DealerDiscount(DiscountMixin, IsActivMixin, models.Model):
     class Meta:
         verbose_name = 'Discount'
         verbose_name_plural = 'Discounts'
-
-
-
 
