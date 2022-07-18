@@ -2,7 +2,7 @@ from django.db import models
 from static.abstractmodels import *
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
 
 class Car(models.Model):
@@ -126,7 +126,7 @@ class Car(models.Model):
 class Dealer(OrganizationsMixin, DataMixin, IsActivMixin, models.Model):
     """Dealer"""
 
-    user = models.OneToOneField(AbstractUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.organization_name

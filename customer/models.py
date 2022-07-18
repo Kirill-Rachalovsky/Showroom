@@ -1,7 +1,6 @@
 from django.db import models
 from static.abstractmodels import *
-from django.contrib.auth.models import AbstractUser
-
+from django.contrib.auth.models import User
 
 class Customer(CustomerMixin, DataMixin, IsActivMixin, models.Model):
     """Customer"""
@@ -13,5 +12,5 @@ class Customer(CustomerMixin, DataMixin, IsActivMixin, models.Model):
         unique=True,
         help_text='<i>Put your unique username</i>'
     )
-    user = models.OneToOneField(AbstractUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 

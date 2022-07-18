@@ -2,6 +2,7 @@ from django.contrib.postgres.fields import DecimalRangeField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 import datetime
+import django.utils.timezone as timezone
 from django_countries.fields import CountryField
 
 
@@ -63,7 +64,7 @@ class CustomerMixin(models.Model):
         help_text='<i>Put your balance in dollars</i>'
     )
     # Сar search options
-    cars_options = models.JSONField(verbose_name='Car priority')
+    cars_options = models.JSONField(verbose_name='Car priority', blank=True, null=True)
 
     class Meta:
         abstract = True
