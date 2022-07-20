@@ -16,6 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from dealer.views import DealerAPIView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/dealers/', DealerAPIView.as_view()),
+
 ]
