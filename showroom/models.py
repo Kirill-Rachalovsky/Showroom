@@ -18,7 +18,7 @@ class Showroom(OrganizationsMixin, CustomerMixin, IsActivMixin, DataMixin, model
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.organization_name
 
     class Meta:
         verbose_name = 'Showroom'
@@ -28,7 +28,12 @@ class Showroom(OrganizationsMixin, CustomerMixin, IsActivMixin, DataMixin, model
 class ShowroomDiscount(DiscountMixin, IsActivMixin, models.Model):
     """Discount"""
 
-    organization = models.ForeignKey(Showroom, on_delete=models.CASCADE)
+    organization = models.ForeignKey(
+        Showroom,
+        on_delete=models.CASCADE,
+        related_name='discounts'
+
+    )
 
     class Meta:
         verbose_name = 'Discount'

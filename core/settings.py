@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'django_countries',
     'rest_framework',
     'dealer.apps.DealerConfig',
@@ -94,7 +95,7 @@ DATABASES = {
         'NAME': os.environ.get('POSTGRES_DB', 'showroom_db'),
         'USER': os.environ.get('POSTGRES_USER', 'kirill'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password1234'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'db'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
         'PORT': os.environ.get('POSTGRES_PORT', '5432'),
     }
 }

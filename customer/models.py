@@ -2,6 +2,7 @@ from django.db import models
 from static.abstractmodels import *
 from django.contrib.auth.models import User
 
+
 class Customer(CustomerMixin, DataMixin, IsActivMixin, models.Model):
     """Customer"""
 
@@ -14,3 +15,5 @@ class Customer(CustomerMixin, DataMixin, IsActivMixin, models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.username

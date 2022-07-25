@@ -1,3 +1,13 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 
-# Create your views here.
+from transactions.serializers import *
+
+
+class ShowroomCustomerDealsViewSet(viewsets.ModelViewSet):
+    queryset = ShowroomCustomerDeals.objects.all()
+    serializer_class = ShowroomCustomerDealsSerializer
+
+
+class DealerShowroomDealsViewSet(viewsets.ModelViewSet):
+    queryset = DealerShowroomDeals.objects.all()
+    serializer_class = DealerShowroomDealsSerializer

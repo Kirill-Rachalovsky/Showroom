@@ -64,7 +64,7 @@ class CustomerMixin(models.Model):
         help_text='<i>Put your balance in dollars</i>'
     )
     # Сar search options
-    cars_options = models.JSONField(verbose_name='Car priority', blank=True, null=True)
+    cars_options = models.CharField(verbose_name='Car priority', max_length=255, blank=True, null=True)
 
     class Meta:
         abstract = True
@@ -86,7 +86,7 @@ class DiscountMixin(models.Model):
     data_end = models.DateField(default=datetime.datetime.now().date() + datetime.timedelta(days=30))
 
     def __str__(self):
-        return f'Buy {self.amount} car to get a {self.discount}% discount for next car!'
+        return f'Buy {self.amount} car to get a {self.discount}% discount for next cars!'
 
     class Meta:
         abstract = True

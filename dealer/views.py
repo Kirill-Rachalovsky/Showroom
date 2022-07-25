@@ -1,10 +1,22 @@
-from django.shortcuts import render
-from rest_framework import generics
-from .models import Dealer
-from .serializers import DealerSerializer
+from rest_framework import viewsets, generics
+from dealer.serializers import *
 
 
-class DealerAPIView(generics.ListAPIView):
+class CarViewSet(viewsets.ModelViewSet):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
+
+
+class DealerViewSet(viewsets.ModelViewSet):
     queryset = Dealer.objects.all()
-    serializer_class = DealerSerializer
+    serializer_class = DealerListSerializer
 
+
+class DealerDetailViewSet(viewsets.ModelViewSet):
+    queryset = Dealer.objects.all()
+    serializer_class = DealerDetailSerializer
+
+
+class DealerDiscountViewSet(viewsets.ModelViewSet):
+    queryset = DealerDiscount.objects.all()
+    serializer_class = DealerDiscountSerializer

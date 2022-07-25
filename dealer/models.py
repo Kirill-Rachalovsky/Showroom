@@ -39,18 +39,18 @@ class Car(models.Model):
 
     COLOR_CHOICER = [
         (None, "Select car's color"),
-        (1, 'Red'),
-        (2, 'Grey'),
-        (3, 'Light blue'),
-        (4, 'Dark blue'),
-        (5, 'Green'),
-        (6, 'Yellow'),
-        (7, 'Pink'),
-        (8, 'Orange'),
-        (9, 'Brown'),
-        (10, 'White'),
-        (11, 'Black'),
-        (12, 'Violet'),
+        ('Red', 'Red'),
+        ('Grey', 'Grey'),
+        ('Light blue', 'Light blue'),
+        ('Dark blue', 'Dark blue'),
+        ('Green', 'Green'),
+        ('Yellow', 'Yellow'),
+        ('Pink', 'Pink'),
+        ('Orange', 'Orange'),
+        ('Brown', 'Brown'),
+        ('White', 'White'),
+        ('Black', 'Black'),
+        ('Violet', 'Violet'),
     ]
 
     YEAR_CHOICES = []
@@ -101,8 +101,9 @@ class Car(models.Model):
         "New car",
         default=False
     )
-    color = models.IntegerField(
+    color = models.CharField(
         'Color',
+        max_length=20,
         choices=COLOR_CHOICER,
     )
     price = models.PositiveIntegerField(
@@ -122,7 +123,7 @@ class Car(models.Model):
         "Dealer",
         null=True,
         blank=True,
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
         related_name="dealers_cars",
     )
     customer = models.ForeignKey(
@@ -132,10 +133,9 @@ class Car(models.Model):
         on_delete=models.SET_NULL,
         related_name="customers_cars",
     )
-    is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'{self.car_model} | year:{self.year} | mileage:{self.mileage}'
+        return f'{self.brand} {self.car_model} | year:{self.year} | mileage:{self.mileage}'
 
     class Meta:
         verbose_name = "Car"
@@ -158,7 +158,11 @@ class Dealer(OrganizationsMixin, DataMixin, IsActivMixin, models.Model):
 class DealerDiscount(DiscountMixin, IsActivMixin, models.Model):
     """Discount"""
 
-    organization = models.ForeignKey('Dealer', on_delete=models.CASCADE)
+    organization = models.ForeignKey(
+        'Dealer',
+        on_delete=models.CASCADE,
+        related_name='discounts'
+    )
 
     class Meta:
         verbose_name = 'Discount'
