@@ -4,6 +4,15 @@ from src.customer.models import Customer
 
 @admin.register(Customer)
 class AdminCustomer(admin.ModelAdmin):
+    list_display = (
+        "username",
+        "balance",
+        "data_creation",
+        "is_active",
+    )
+    list_editable = (
+        "is_active",
+    )
     readonly_fields = (
         "data_creation",
         "data_update",

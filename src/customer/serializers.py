@@ -4,6 +4,7 @@ from src.transactions.serializers import *
 
 
 class CustomerSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     buying_history = serializers.SerializerMethodField()
     buying_statistic = serializers.SerializerMethodField()
 
