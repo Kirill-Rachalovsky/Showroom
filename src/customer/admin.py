@@ -1,27 +1,53 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from src.customer.models import Customer
 
 
 @admin.register(Customer)
 class AdminCustomer(admin.ModelAdmin):
+
     list_display = (
+        "id",
         "username",
         "balance",
-        "data_creation",
         "is_active",
+        "total_deals",
     )
+
     list_editable = (
         "is_active",
     )
     readonly_fields = (
-        "data_creation",
-        "data_update",
         "balance",
         "total_deals",
     )
-    list_filter = (
-        "data_creation",
-        "data_update",
+
+    add_fieldsets = (
+        *UserAdmin.add_fieldsets,
+        (
+            "Custom fields",
+            {
+                "fields": (
+                    "balance",
+                    "car_priority",
+                    "total_deals",
+                )
+            }
+        )
+    )
+
+    fieldsets = (
+        *UserAdmin.fieldsets,
+        (
+            "Custom fields",
+            {
+                "fields": (
+                    "balance",
+                    "car_priority",
+                    "total_deals",
+                )
+            }
+        )
     )
 
     def total_deals(self, obj):
