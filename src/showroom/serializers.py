@@ -71,6 +71,7 @@ class ShowroomDetailSerializer(serializers.ModelSerializer):
     discount = serializers.SerializerMethodField()
     sales_history = serializers.SerializerMethodField()
     buying_history = serializers.SerializerMethodField()
+    total_sales = serializers.SerializerMethodField()
 
     class Meta:
         model = Showroom
@@ -78,6 +79,7 @@ class ShowroomDetailSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'description',
+            'total_sales',
             'country',
             'start_year',
             'is_active',
@@ -87,6 +89,15 @@ class ShowroomDetailSerializer(serializers.ModelSerializer):
             'sales_history',
             'buying_history',
         )
+
+    def get_total_sales(self, obj):
+        total = (
+            Showroom.objects.get(id=obj.id)
+            .sales_history
+            .all()
+            .count()
+        )
+        return total
 
     def get_sales_history(self, obj):
         showroom_obj = Showroom.objects.get(id=obj.id)
@@ -111,7 +122,7 @@ class ShowroomDetailSerializer(serializers.ModelSerializer):
 
     def get_buying_history(self, obj):
         showroom_obj = Showroom.objects.get(id=obj.id)
-        queryset =(
+        queryset = (
             showroom_obj
             .buying_history
             .values('seller__name')
@@ -119,4 +130,3 @@ class ShowroomDetailSerializer(serializers.ModelSerializer):
         )
         serializer_data = ShowroomBuyingHistorySerializer(queryset, many=True).data
         return serializer_data
-
