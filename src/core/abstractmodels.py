@@ -67,7 +67,7 @@ class CustomerMixin(models.Model):
 
     balance = models.PositiveIntegerField(
         'Balance',
-        default=0,
+        default=500000,
         help_text='<i>Put your balance in dollars</i>'
     )
     # Сar search options
