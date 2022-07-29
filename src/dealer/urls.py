@@ -3,7 +3,7 @@ from rest_framework import routers
 from src.dealer.views import *
 
 router = routers.DefaultRouter()
-router.register(r'', DealerViewSet)
+router.register(r'list', DealerViewSet)
 router.register(r'car', CarViewSet)
 router.register(r'detail', DealerDetailViewSet)
 
