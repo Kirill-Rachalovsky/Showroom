@@ -12,6 +12,7 @@ mixins = "*"
 django-debug-toolbar = "*"
 drf-yasg = "*"
 django-filter = "*"
+pytest = "*"
 
 [dev-packages]
 
