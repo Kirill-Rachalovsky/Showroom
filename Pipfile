@@ -5,16 +5,15 @@ name = "pypi"
 
 [packages]
 django = "*"
-django-countries = "*"
 djangorestframework = "*"
-psycopg2-binary = "*"
-mixins = "*"
-django-debug-toolbar = "*"
-drf-yasg = "*"
+django-countries = "*"
 django-filter = "*"
+psycopg2-binary = "*"
+django-debug-toolbar = "*"
 pytest = "*"
+django-rest-swagger = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.10"
+python_version = "3.9"

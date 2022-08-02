@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     'django_countries',
     'django_filters',
     'debug_toolbar',
-    'drf_yasg',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
@@ -84,6 +84,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'staticfiles': 'django.templatetags.static',
+            },
         },
     },
 ]
@@ -100,7 +103,7 @@ DATABASES = {
         'NAME': os.environ.get('POSTGRES_DB', 'showroom_db'),
         'USER': os.environ.get('POSTGRES_USER', 'kirill'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password1234'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'db'),
         'PORT': os.environ.get('POSTGRES_PORT', '5432'),
     }
 }
@@ -156,5 +159,6 @@ AUTH_USER_MODEL = 'customer.Customer'
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
