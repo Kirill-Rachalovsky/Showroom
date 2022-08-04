@@ -4,6 +4,17 @@ from src.transactions.serializers import *
 
 
 class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'username',
+        )
+
+
+class CustomerDetailSerializer(serializers.ModelSerializer):
     buying_history = serializers.SerializerMethodField()
     buying_statistic = serializers.SerializerMethodField()
 

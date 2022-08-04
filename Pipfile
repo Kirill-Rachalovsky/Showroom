@@ -12,6 +12,7 @@ psycopg2-binary = "*"
 django-debug-toolbar = "*"
 pytest = "*"
 django-rest-swagger = "*"
+pytest-django = "*"
 
 [dev-packages]
 
