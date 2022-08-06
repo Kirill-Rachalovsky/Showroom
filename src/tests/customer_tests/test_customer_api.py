@@ -62,28 +62,28 @@ def test_customer_post(payload, payload1, client, auth_client, post_responses):
 
 
 @pytest.mark.django_db
-def test_customer_details_get(client, auth_client, customer, details_responses, post_responses):
+def test_customer_details_get(client, auth_client, customer, details_customer_responses):
     """
     Ensure that only user and admin can get detail info about this user.
     """
     customer = customer(payload)
 
-    assert details_responses(client=client, url=url, model=Customer, payload=payload) == 200
-    assert details_responses(client=client, url=detail_url, model=Customer, payload=payload) == 403
-    assert details_responses(client=auth_client, url=detail_url, model=Customer, payload=payload) == 403
-    assert details_responses(client=customer, url=detail_url, model=Customer, payload=payload) == 200
+    assert details_customer_responses(client=client, url=url, model=Customer, payload=payload) == 200
+    assert details_customer_responses(client=client, url=detail_url, model=Customer, payload=payload) == 403
+    assert details_customer_responses(client=auth_client, url=detail_url, model=Customer, payload=payload) == 403
+    assert details_customer_responses(client=customer, url=detail_url, model=Customer, payload=payload) == 200
 
 
 @pytest.mark.django_db
-def test_customer_delete(client, auth_client, customer, delete_responses, post_responses):
+def test_customer_delete(client, auth_client, customer, delete_customer_responses):
     """
-    Ensure that only page owner adn admin can delete a Customer.
+    Ensure that only page owner and admin can delete a Customer.
     """
     customer = customer(payload)
 
-    assert delete_responses(client=client, url=detail_url, model=Customer, payload=payload) == 403
-    assert delete_responses(client=auth_client, url=detail_url, model=Customer, payload=payload) == 403
-    assert delete_responses(client=customer, url=detail_url, model=Customer, payload=payload) == 204
+    assert delete_customer_responses(client=client, url=detail_url, model=Customer, payload=payload) == 403
+    assert delete_customer_responses(client=auth_client, url=detail_url, model=Customer, payload=payload) == 403
+    assert delete_customer_responses(client=customer, url=detail_url, model=Customer, payload=payload) == 204
 
 
 @pytest.mark.django_db
@@ -91,25 +91,33 @@ def test_customer_delete(client, auth_client, customer, delete_responses, post_r
     (payload, update_payload),
     (payload1, update_payload1)
 ])
-def test_customer_put(payload, update_payload, client, auth_client, customer, put_responses, post_responses):
+def test_customer_put(payload, update_payload, client, auth_client, customer, put_customer_responses):
     """
-    Ensure that only authorized user can update a Customer.
+    Ensure that only page owner and admin  user can update a Customer.
     """
 
     customer = customer(payload)
 
-    assert put_responses(client=client,
-                         url=detail_url,
-                         model=Customer,
-                         payload=payload,
-                         update_payload=update_payload) == 403
-    assert put_responses(client=auth_client,
-                         url=detail_url,
-                         model=Customer,
-                         payload=payload,
-                         update_payload=update_payload) == 403
-    assert put_responses(client=customer,
-                         url=detail_url,
-                         model=Customer,
-                         payload=payload,
-                         update_payload=update_payload) == 200
+    assert put_customer_responses(
+        client=client,
+        url=detail_url,
+        model=Customer,
+        payload=payload,
+        update_payload=update_payload
+    ) == 403
+
+    assert put_customer_responses(
+        client=auth_client,
+        url=detail_url,
+        model=Customer,
+        payload=payload,
+        update_payload=update_payload
+    ) == 403
+
+    assert put_customer_responses(
+        client=customer,
+        url=detail_url,
+        model=Customer,
+        payload=payload,
+        update_payload=update_payload
+    ) == 200

@@ -35,6 +35,18 @@ def customer():
     return _customer
 
 
+def _admin_customer():
+    customer = APIClient()
+    user = Customer.objects.create_superuser(username='test_admin_user', password='password1234')
+    customer.force_login(user)
+    return customer
+
+
+@pytest.fixture
+def admin_customer():
+    return _admin_customer
+
+
 def _get_responses(client, url):
     return client.get(url).status_code
 
@@ -54,8 +66,8 @@ def post_responses():
 
 
 def _details_responses(client, url, model, payload):
-    username = payload["username"]
-    data_id = str(model.objects.get(username=username).id)
+    name = payload["name"]
+    data_id = str(model.objects.get(name=name).id)
     return client.get(url + data_id + "/").status_code
 
 
@@ -65,8 +77,8 @@ def details_responses():
 
 
 def _put_responses(client, url, model, payload, update_payload):
-    username = payload["username"]
-    data_id = str(model.objects.get(username=username).id)
+    name = payload["name"]
+    data_id = str(model.objects.get(name=name).id)
     return client.put(url + data_id + "/", update_payload).status_code
 
 
@@ -76,8 +88,8 @@ def put_responses():
 
 
 def _delete_responses(client, url, model, payload):
-    username = payload["username"]
-    data_id = str(model.objects.get(username=username).id)
+    name = payload["name"]
+    data_id = str(model.objects.get(name=name).id)
     return client.delete(url + data_id + "/").status_code
 
 
@@ -85,3 +97,38 @@ def _delete_responses(client, url, model, payload):
 def delete_responses():
     return _delete_responses
 
+
+"""    Features for customer_test   """
+
+
+def _details_customer_responses(client, url, model, payload):
+    username = payload["username"]
+    data_id = str(model.objects.get(username=username).id)
+    return client.get(url + data_id + "/").status_code
+
+
+@pytest.fixture
+def details_customer_responses():
+    return _details_customer_responses
+
+
+def _put_customer_responses(client, url, model, payload, update_payload):
+    username = payload["username"]
+    data_id = str(model.objects.get(username=username).id)
+    return client.put(url + data_id + "/", update_payload).status_code
+
+
+@pytest.fixture
+def put_customer_responses():
+    return _put_customer_responses
+
+
+def _delete_customer_responses(client, url, model, payload):
+    username = payload["username"]
+    data_id = str(model.objects.get(username=username).id)
+    return client.delete(url + data_id + "/").status_code
+
+
+@pytest.fixture
+def delete_customer_responses():
+    return _delete_customer_responses
