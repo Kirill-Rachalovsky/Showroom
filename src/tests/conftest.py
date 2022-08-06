@@ -17,6 +17,24 @@ def auth_client():
     return auth_client
 
 
+def _customer(payload):
+    customer = APIClient()
+    user = Customer.objects.create_user(
+        username=payload['username'],
+        first_name=payload['first_name'],
+        last_name=payload['last_name'],
+        email=payload['email'],
+        password=payload['password']
+    )
+    customer.force_login(user)
+    return customer
+
+
+@pytest.fixture
+def customer():
+    return _customer
+
+
 def _get_responses(client, url):
     return client.get(url).status_code
 
@@ -47,8 +65,8 @@ def details_responses():
 
 
 def _put_responses(client, url, model, payload, update_payload):
-    name = payload["name"]
-    data_id = str(model.objects.get(name=name).id)
+    username = payload["username"]
+    data_id = str(model.objects.get(username=username).id)
     return client.put(url + data_id + "/", update_payload).status_code
 
 
@@ -58,8 +76,8 @@ def put_responses():
 
 
 def _delete_responses(client, url, model, payload):
-    name = payload["name"]
-    data_id = str(model.objects.get(name=name).id)
+    username = payload["username"]
+    data_id = str(model.objects.get(username=username).id)
     return client.delete(url + data_id + "/").status_code
 
 
