@@ -4,7 +4,17 @@ from src.transactions.serializers import *
 
 
 class CustomerSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    class Meta:
+        model = Customer
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'username',
+        )
+
+
+class CustomerDetailSerializer(serializers.ModelSerializer):
     buying_history = serializers.SerializerMethodField()
     buying_statistic = serializers.SerializerMethodField()
 
@@ -13,12 +23,11 @@ class CustomerSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'first_name',
-            'second_name',
+            'last_name',
             'username',
             'balance',
             'buying_history',
             'buying_statistic',
-            'user',
             'is_active',
         )
 

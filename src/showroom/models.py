@@ -6,6 +6,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Showroom(OrganizationsMixin, CustomerMixin, IsActivMixin, DataMixin, models.Model):
     """Showroom"""
 
+    total_sales = models.PositiveIntegerField(default=0)
     price_increase = models.PositiveSmallIntegerField(
         default=30,
         validators=[MaxValueValidator(500), MinValueValidator(1)],

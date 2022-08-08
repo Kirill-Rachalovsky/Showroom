@@ -143,6 +143,8 @@ class Car(models.Model):
 class Dealer(OrganizationsMixin, DataMixin, IsActivMixin, models.Model):
     """Dealer"""
 
+    total_sales = models.PositiveIntegerField(default=0)
+
     def __str__(self):
         return self.name
 

@@ -54,8 +54,9 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'django_countries',
+    'django_filters',
     'debug_toolbar',
-    'drf_yasg',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
@@ -83,6 +84,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'staticfiles': 'django.templatetags.static',
+            },
         },
     },
 ]
@@ -149,3 +153,12 @@ INTERNAL_IPS = [
     "127.0.0.1",
     "0.0.0.0",
 ]
+
+AUTH_USER_MODEL = 'customer.Customer'
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+}
