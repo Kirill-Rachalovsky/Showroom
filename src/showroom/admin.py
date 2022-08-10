@@ -2,13 +2,18 @@ from django.contrib import admin
 from src.showroom.models import *
 
 
-@admin.register(ShowroomDiscount)
+@admin.register(ShowroomPersonalDiscount)
 class ShowroomDiscountAdmin(admin.ModelAdmin):
     list_filter = (
-        "data_start",
-        "data_end",
         "amount",
         "discount",
+    )
+
+
+@admin.register(ShowroomDiscountsCars)
+class ShowroomDiscountsCars(admin.ModelAdmin):
+    list_filter = (
+        "showroom",
     )
 
 

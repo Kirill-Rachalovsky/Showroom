@@ -8,31 +8,31 @@ class Car(models.Model):
 
     BODY_CHOICES = [
         (None, 'Select the car body type'),
-        (1, 'SUV'),
-        (2, 'Sedan'),
-        (3, 'Сoupe'),
-        (4, 'Wagon'),
-        (5, 'Minivan'),
-        (6, 'Hatchback'),
-        (7, 'Liftback'),
-        (8, 'Limousine'),
-        (9, 'Cabriolet'),
-        (10, 'Another')
+        ('SUV', 'SUV'),
+        ('Sedan', 'Sedan'),
+        ('Сoupe', 'Сoupe'),
+        ('Wagon', 'Wagon'),
+        ('Minivan', 'Minivan'),
+        ('Hatchback', 'Hatchback'),
+        ('Liftback', 'Liftback'),
+        ('Limousine', 'Limousine'),
+        ('Cabriolet', 'Cabriolet'),
+        ('Another', 'Another')
     ]
 
     TRANSMISSION_CHOICES = [
         (None, 'Select transmission type'),
-        (1, 'Manual'),
-        (2, 'Automatic'),
+        ('Manual', 'Manual'),
+        ('Automatic', 'Automatic'),
     ]
 
     FUEL_CHOICER = [
         (None, 'Select fuel type'),
-        (1, 'Petrol'),
-        (2, 'Diesel'),
-        (3, 'Gas'),
-        (4, 'Electric'),
-        (5, 'Hybrid'),
+        ('Petrol', 'Petrol'),
+        ('Diesel', 'Diesel'),
+        ('Gas', 'Gas'),
+        ('Electric', 'Electric'),
+        ('Hybrid', 'Hybrid'),
     ]
 
     COLOR_CHOICER = [
@@ -53,7 +53,7 @@ class Car(models.Model):
 
     YEAR_CHOICES = []
 
-    for r in range(2000, (datetime.datetime.now().year + 1)):
+    for r in range(1980, (datetime.datetime.now().year + 1)):
         YEAR_CHOICES.append((r, r))
 
     brand = models.CharField(
@@ -70,21 +70,25 @@ class Car(models.Model):
         blank=True,
         help_text='<i>More information about the car...</i>'
     )
-    body_type = models.IntegerField(
+    body_type = models.CharField(
         "Body type",
+        max_length=50,
         choices=BODY_CHOICES
     )
-    year = models.IntegerField(
+    year = models.CharField(
         "Year",
+        max_length=50,
         choices=YEAR_CHOICES,
         default=datetime.datetime.now().year,
     )
-    transmission = models.IntegerField(
+    transmission = models.CharField(
         "Transmission",
+        max_length=50,
         choices=TRANSMISSION_CHOICES
     )
-    fuel = models.IntegerField(
+    fuel = models.CharField(
         'Fuel type',
+        max_length=50,
         choices=FUEL_CHOICER,
     )
     engine_capacity = models.FloatField(
@@ -140,7 +144,7 @@ class Car(models.Model):
         verbose_name_plural = "Cars"
 
 
-class Dealer(OrganizationsMixin, DataMixin, IsActivMixin, models.Model):
+class Dealer(OrganizationsMixin, DataMixin, IsActivMixin):
     """Dealer"""
 
     total_sales = models.PositiveIntegerField(default=0)
@@ -153,7 +157,7 @@ class Dealer(OrganizationsMixin, DataMixin, IsActivMixin, models.Model):
         verbose_name_plural = 'Dealers'
 
 
-class DealerDiscount(DiscountMixin, IsActivMixin, models.Model):
+class DealerPersonalDiscount(PersonalDiscountMixin, IsActivMixin):
     """Discount"""
 
     organization = models.ForeignKey(
@@ -162,7 +166,30 @@ class DealerDiscount(DiscountMixin, IsActivMixin, models.Model):
         related_name='discounts'
     )
 
-    class Meta:
-        verbose_name = 'Discount'
-        verbose_name_plural = 'Discounts'
+    def __str__(self):
+        return f'{self.organization}: "Buy {self.amount} car to get a {self.discount}% discount for next cars!"'
 
+    class Meta:
+        verbose_name = 'Personal Discount'
+        verbose_name_plural = 'Personal Discounts'
+
+
+class DealerDiscountsCars(DiscountsCarsMixin):
+
+    dealer = models.ForeignKey(
+        'dealer.Dealer',
+        on_delete=models.CASCADE,
+        related_name='car_discounts'
+    )
+    car = models.ForeignKey(
+        "dealer.Car",
+        on_delete=models.CASCADE,
+        related_name="discount_dealer_cars"
+    )
+
+    def __str__(self):
+        return f'{self.car} has {self.percent} percent off in {self.dealer}!'
+
+    class Meta:
+        verbose_name = 'Cars Discount'
+        verbose_name_plural = 'Cars Discounts'

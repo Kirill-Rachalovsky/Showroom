@@ -6,14 +6,12 @@ from src.dealer.serializers import CarSerializer
 from src.showroom.models import *
 
 
-class ShowroomDiscountSerializer(serializers.ModelSerializer):
+class ShowroomPersonalDiscountSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ShowroomDiscount
+        model = ShowroomPersonalDiscount
         fields = (
             'amount',
             'discount',
-            'data_start',
-            'data_end',
         )
 
 
@@ -43,7 +41,7 @@ class ShowroomListSerializer(serializers.ModelSerializer):
             .discounts
             .filter(is_active=True)
         )
-        serializer = ShowroomDiscountSerializer(queryset, many=True).data
+        serializer = ShowroomPersonalDiscountSerializer(queryset, many=True).data
         return serializer
 
     def get_amount_buyers(self, obj):
@@ -117,7 +115,7 @@ class ShowroomDetailSerializer(serializers.ModelSerializer):
             .discounts
             .filter(is_active=True)
         )
-        serializer = ShowroomDiscountSerializer(queryset, many=True).data
+        serializer = ShowroomPersonalDiscountSerializer(queryset, many=True).data
         return serializer
 
     def get_buying_history(self, obj):

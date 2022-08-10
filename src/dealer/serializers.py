@@ -24,14 +24,12 @@ class CarSerializer(serializers.ModelSerializer):
         )
 
 
-class DealerDiscountSerializer(serializers.ModelSerializer):
+class DealerPersonalDiscountSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DealerDiscount
+        model = DealerPersonalDiscount
         fields = (
             'amount',
             'discount',
-            'data_start',
-            'data_end',
         )
 
 
@@ -62,7 +60,7 @@ class DealerListSerializer(serializers.ModelSerializer):
             .discounts
             .filter(is_active=True)
         )
-        serializer = DealerDiscountSerializer(queryset, many=True).data
+        serializer = DealerPersonalDiscountSerializer(queryset, many=True).data
         return serializer
 
     def get_amount_buyers(self, obj):
@@ -123,7 +121,7 @@ class DealerDetailSerializer(serializers.ModelSerializer):
             .discounts
             .filter(is_active=True)
         )
-        serializer = DealerDiscountSerializer(queryset, many=True).data
+        serializer = DealerPersonalDiscountSerializer(queryset, many=True).data
         return serializer
 
     def get_sales_history(self, obj):
