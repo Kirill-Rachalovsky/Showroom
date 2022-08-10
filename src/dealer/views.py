@@ -26,7 +26,7 @@ class DealerDetailViewSet(viewsets.ModelViewSet):
     filterset_class = DealerFilter
 
 
-class DealerDiscountViewSet(viewsets.ModelViewSet):
-    queryset = DealerDiscount.objects.all()
-    serializer_class = DealerDiscountSerializer
+class DealerPersonalDiscountViewSet(viewsets.ModelViewSet):
+    queryset = DealerPersonalDiscount.objects.all()
+    serializer_class = DealerPersonalDiscountSerializer
     permission_classes = (IsAdminOrReadOnly,)

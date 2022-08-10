@@ -21,6 +21,6 @@ class ShowroomDetailViewSet(viewsets.ModelViewSet):
 
 
 class ShowroomDiscountViewSet(viewsets.ModelViewSet):
-    queryset = ShowroomDiscount.objects.all()
-    serializer_class = ShowroomDiscountSerializer
+    queryset = ShowroomPersonalDiscount.objects.all()
+    serializer_class = ShowroomPersonalDiscountSerializer
     permission_classes = (IsAdminOrReadOnly, )

@@ -1,8 +1,9 @@
 version: "3.9"
 
 services:
-  db:
+  pg_db:
     image: postgres:14.0-alpine
+    restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
@@ -15,6 +16,7 @@ services:
   web_app:
     build: .
     command: sh -c "
+      sleep 10 &&
       python manage.py makemigrations &&
       python manage.py migrate &&
       python manage.py runserver 0.0.0.0:8000"
@@ -27,7 +29,7 @@ services:
       - POSTGRES_USER=kirill
       - POSTGRES_PASSWORD=password1234
     depends_on:
-      - db
+      - pg_db
 
 volumes:
   postgres_data:

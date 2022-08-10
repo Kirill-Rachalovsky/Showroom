@@ -1,8 +1,7 @@
-from django.contrib.postgres.fields import DecimalRangeField
+import datetime
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-import datetime
-import django.utils.timezone as timezone
 from django_countries.fields import CountryField
 
 
@@ -38,7 +37,7 @@ class OrganizationsMixin(models.Model):
 
     YEAR_CHOICES = []
 
-    for r in range(2000, (datetime.datetime.now().year + 1)):
+    for r in range(1980, (datetime.datetime.now().year + 1)):
         YEAR_CHOICES.append((r, r))
 
     name = models.CharField(
@@ -81,8 +80,8 @@ class CustomerMixin(models.Model):
         abstract = True
 
 
-class DiscountMixin(models.Model):
-    """Discount information"""
+class PersonalDiscountMixin(models.Model):
+    """Discount personal discount information"""
 
     amount = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(0)],
@@ -93,11 +92,20 @@ class DiscountMixin(models.Model):
         validators=[MaxValueValidator(100), MinValueValidator(0)],
         help_text='Enter the size of the discount in percent',
     )
-    data_start = models.DateField()
-    data_end = models.DateField(default=datetime.datetime.now().date() + datetime.timedelta(days=30))
-
-    def __str__(self):
-        return f'Buy {self.amount} car to get a {self.discount}% discount for next cars!'
 
     class Meta:
         abstract = True
+
+
+class DiscountsCarsMixin(models.Model):
+    """Cars with discount"""
+
+    percent = models.PositiveSmallIntegerField(default=3)
+    data_start = models.DateField(auto_now_add=True)
+    data_end = models.DateField(default=datetime.datetime.now().date() + datetime.timedelta(days=30))
+
+    class Meta:
+        abstract = True
+
+
+

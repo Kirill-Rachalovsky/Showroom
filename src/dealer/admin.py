@@ -2,13 +2,18 @@ from django.contrib import admin
 from src.dealer.models import *
 
 
-@admin.register(DealerDiscount)
+@admin.register(DealerPersonalDiscount)
 class DealerDiscountAdmin(admin.ModelAdmin):
     list_filter = (
-        "data_start",
-        "data_end",
         "amount",
         "discount",
+    )
+
+
+@admin.register(DealerDiscountsCars)
+class DealerDiscountsCars(admin.ModelAdmin):
+    list_filter = (
+        "dealer",
     )
 
 
