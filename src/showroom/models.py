@@ -3,7 +3,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
-class Showroom(OrganizationsMixin, CustomerMixin, IsActivMixin, DataMixin, models.Model):
+class Showroom(OrganizationsMixin, CustomerMixin, IsActivMixin, DataMixin):
     """Showroom"""
 
     total_sales = models.PositiveIntegerField(default=0)
@@ -21,7 +21,7 @@ class Showroom(OrganizationsMixin, CustomerMixin, IsActivMixin, DataMixin, model
         verbose_name_plural = 'Showrooms'
 
 
-class ShowroomPersonalDiscount(PersonalDiscountMixin, IsActivMixin, models.Model):
+class ShowroomPersonalDiscount(PersonalDiscountMixin, IsActivMixin):
     """Discount"""
 
     organization = models.ForeignKey(
@@ -47,7 +47,7 @@ class ShowroomDiscountsCars(DiscountsCarsMixin):
         related_name='car_discounts'
     )
     car = models.ForeignKey(
-        "dealer.Car",
+        "car.Car",
         on_delete=models.CASCADE,
         related_name="discount_showroom_cars"
     )

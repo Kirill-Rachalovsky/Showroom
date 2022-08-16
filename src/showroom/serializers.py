@@ -1,7 +1,7 @@
 from django.db.models import Count
 
 from src.transactions.serializers import *
-from src.dealer.serializers import CarSerializer
+from src.car.serializers import CarSerializer
 
 from src.showroom.models import *
 

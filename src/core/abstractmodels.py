@@ -66,7 +66,7 @@ class CustomerMixin(models.Model):
 
     balance = models.PositiveIntegerField(
         'Balance',
-        default=500000,
+        default=1000000,
         help_text='<i>Put your balance in dollars</i>'
     )
     # Сar search options
@@ -107,5 +107,14 @@ class DiscountsCarsMixin(models.Model):
     class Meta:
         abstract = True
 
+
+class TransactionMixin(models.Model):
+
+    total_price = models.IntegerField(default=0)
+    deal_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        abstract = True
+        db_table = "sales_dealer_to_showroom"
 
 

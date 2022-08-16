@@ -1,7 +1,9 @@
 from django.db import models
 
+from src.core.abstractmodels import TransactionMixin
 
-class ShowroomCustomerDeals(models.Model):
+
+class ShowroomCustomerDeals(TransactionMixin):
     """Showroom  --> Customer deals"""
 
     buyer = models.ForeignKey(
@@ -15,7 +17,7 @@ class ShowroomCustomerDeals(models.Model):
         related_name='sales_history'
     )
     car = models.ForeignKey(
-        'dealer.Car',
+        'car.Car',
         on_delete=models.PROTECT,
         related_name='car_info'
     )
@@ -29,7 +31,7 @@ class ShowroomCustomerDeals(models.Model):
         return f'{self.seller} --> {self.buyer}, auto "{self.car}"'
 
 
-class DealerShowroomDeals(models.Model):
+class DealerShowroomDeals(TransactionMixin):
     """Dealer --> Showroom deals"""
 
     buyer = models.ForeignKey(
@@ -43,10 +45,9 @@ class DealerShowroomDeals(models.Model):
         related_name='sales_history'
     )
     car = models.ForeignKey(
-        'dealer.Car',
+        'car.Car',
         on_delete=models.PROTECT
     )
-    deal_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = 'Dealer --> Showroom deal'
@@ -54,4 +55,3 @@ class DealerShowroomDeals(models.Model):
 
     def __str__(self):
         return f'{self.seller} --> {self.buyer}, auto "{self.car}"'
-

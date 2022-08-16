@@ -858,11 +858,14 @@ def get_random_year():
 def default_showroom_priorities():
     return {"brand": "Tesla",
             "car_model": "Model S",
-            "color": "Black",
+            "body_type": "Sedan",
+            "year": "2020",
             "transmission": "Automatic",
             "fuel": "Electric",
-            "year": "2020",
-            "body_type": "Sedan"}
+            "engine_capacity": "",
+            "mileage": 999999,
+            "color": "Black",
+            "price": 999999}
 
 
 def get_random_car():

@@ -1,27 +1,8 @@
-from rest_framework import serializers
 from django.db.models import Count
+
+from src.car.serializers import *
 from src.dealer.models import *
 from src.transactions.serializers import *
-
-
-class CarSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Car
-        fields = (
-            'brand',
-            'car_model',
-            'description',
-            'body_type',
-            'year',
-            'transmission',
-            'fuel',
-            'engine_capacity',
-            'mileage',
-            'is_new_car',
-            'color',
-            'price',
-        )
 
 
 class DealerPersonalDiscountSerializer(serializers.ModelSerializer):

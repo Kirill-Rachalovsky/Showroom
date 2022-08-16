@@ -2,7 +2,6 @@ from rest_framework import viewsets
 from rest_framework.filters import OrderingFilter, SearchFilter
 
 from src.core.permissions import IsAdminOrIsOwner, IsAdminOrReadOnly
-from src.customer.models import Customer
 from src.customer.serializers import *
 
 

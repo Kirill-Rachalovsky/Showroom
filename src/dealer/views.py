@@ -1,15 +1,9 @@
 from rest_framework import viewsets
-from src.dealer.serializers import *
 from rest_framework.permissions import IsAdminUser
+
 from src.core.permissions import *
-from rest_framework.filters import OrderingFilter, SearchFilter
 from src.dealer.filters import *
-
-
-class CarViewSet(viewsets.ModelViewSet):
-    queryset = Car.objects.all()
-    serializer_class = CarSerializer
-    permission_classes = (IsAdminUser,)
+from src.dealer.serializers import *
 
 
 class DealerViewSet(viewsets.ModelViewSet):
