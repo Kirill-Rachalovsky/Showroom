@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'src.car',
     'src.dealer',
     'src.showroom',
     'src.customer',
@@ -154,6 +155,7 @@ INTERNAL_IPS = [
     "0.0.0.0",
 ]
 
+# custom user
 AUTH_USER_MODEL = 'customer.Customer'
 
 REST_FRAMEWORK = {
@@ -162,3 +164,20 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
+
+# redis
+REDIS_HOST = 'redis'
+REDIS_PORT = '6379'
+
+# celery_tasks
+CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_BROKER_TRANSPORT_OPTION = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_IMPORTS = [
+    'src.car.tasks',
+    'src.showroom.tasks',
+    # 'src.customer.tasks',
+]

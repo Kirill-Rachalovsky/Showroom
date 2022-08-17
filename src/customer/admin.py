@@ -50,12 +50,3 @@ class AdminCustomer(admin.ModelAdmin):
         )
     )
 
-    def total_deals(self, obj):
-        customer_obj = Customer.objects.get(id=obj.id)
-        total = (
-            customer_obj
-            .buying_history
-            .all()
-            .count()
-        )
-        return total

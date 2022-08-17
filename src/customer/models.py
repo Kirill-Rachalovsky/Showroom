@@ -6,6 +6,7 @@ from django.db import models
 class Customer(CustomerMixin, AbstractUser):
     """Customer"""
 
+    total_deals = models.PositiveIntegerField(default=0)
     username = models.CharField(
         max_length=50,
         unique=True,

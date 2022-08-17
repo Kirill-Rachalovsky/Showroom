@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from src.dealer.models import Car
+from src.car.models import Car
 from src.showroom.models import Showroom
 from src.transactions.models import *
 

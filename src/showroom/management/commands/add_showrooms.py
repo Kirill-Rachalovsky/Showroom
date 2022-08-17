@@ -2,14 +2,14 @@ from django.core.management.base import BaseCommand
 
 from src.core.cars_data import *
 from src.showroom.models import *
-from src.dealer.models import Car
+from src.car.models import Car
 
 
 def add_showrooms():
     for showroom in showroom_list:
 
         car_options = []
-        for i in range(5):
+        for i in range(15):
             car_options.append(get_random_car())
 
         Showroom.objects.create(
