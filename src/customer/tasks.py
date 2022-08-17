@@ -102,4 +102,3 @@ def showroom_customer_offer():
 def make_customer_offer():
     change_car_priority()
     showroom_customer_offer()
-

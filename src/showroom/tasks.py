@@ -94,3 +94,4 @@ def dealer_showroom_offer():
 @shared_task
 def add_cars_discounts():
     add_discounts_cars()
+

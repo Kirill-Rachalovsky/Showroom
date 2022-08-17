@@ -8,6 +8,7 @@ app = Celery('config')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
+
 # app.conf.beat_schedule = {
 #     "add-cars-every-three-minutes": {
 #         "task": "src.car.tasks.car_task",
