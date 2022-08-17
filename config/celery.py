@@ -18,12 +18,12 @@ app.autodiscover_tasks()
 #         "task": "src.showroom.tasks.dealer_showroom_offer",
 #         "schedule": crontab(minute="*/1"),
 #     },
-#     "showroom-make-discount-car": {
+#     "showroom-make-discount-car-every-three-minute": {
 #         "task": "src.showroom.tasks.add_cars_discounts",
 #         "schedule": crontab(minute="*/3"),
 #     },
-#     "buy-customer-showroom-every-two-minutes": {
+#     "buy-customer-showroom-every-single-minute": {
 #         "task": "src.customer.tasks.make_customer_offer",
-#         "schedule": crontab(minute="*/2"),
+#         "schedule": crontab(minute="*/1"),
 #     },
 # }

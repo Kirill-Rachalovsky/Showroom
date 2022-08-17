@@ -9,7 +9,7 @@ from src.showroom.models import *
 from src.transactions.models import ShowroomCustomerDeals
 
 
-def offer_choicer(customer, car_list):
+def find_best_offer(customer, car_list):
     offers_with_discount = dict()
 
     for car in car_list:
@@ -76,7 +76,7 @@ def showroom_customer_offer():
         if len(car_list) == 0:
             continue
 
-        best_offer, best_price = offer_choicer(customer, car_list)
+        best_offer, best_price = find_best_offer(customer, car_list)
 
         with transaction.atomic():
             if customer.balance >= best_price:
