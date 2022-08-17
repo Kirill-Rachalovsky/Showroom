@@ -1,20 +1,68 @@
 from celery import shared_task
 from django.db import transaction
+from django.db.models import Q
 
-from src.showroom.models import Showroom
-from src.showroom.management.commands.add_showrooms_discounts import add_discounts_cars
-from src.dealer.models import *
 from src.car.models import *
+from src.dealer.models import *
+from src.showroom.management.commands.add_showrooms_discounts import add_discounts_cars
+from src.showroom.models import Showroom
 from src.transactions.models import DealerShowroomDeals
+
+
+def offer_choicer(showroom, car_info, car_list):
+    offers_with_discount = dict()
+
+    for car in car_list:
+        discount = 0
+        loyality = 0
+
+        total_deals = (
+            DealerShowroomDeals
+            .objects
+            .filter(buyer=showroom, seller=car.dealer, car=car.id)
+        ).count()
+
+        loyalty_program = car.dealer.discounts.first()
+
+        if total_deals > loyalty_program.amount:
+            loyality = loyalty_program.discount
+
+        try:
+            discount_obj = DealerDiscountsCars.objects.get(id=car_info[0].id)
+            if (discount_obj.dealer == car.dealer):
+                discount = discount_obj.percent
+        except:
+            discount = 0
+
+        total_discount = max(loyality, discount)
+        total_price = int(car.price * (100 - total_discount) / 100)
+        offers_with_discount[car.id] = total_price
+
+    best_price = min(offers_with_discount.values())
+
+    top_offer_id = 0
+    for offer in offers_with_discount:
+        if offers_with_discount[offer] == best_price:
+            top_offer_id = offer
+            break
+
+    best_offer = Car.objects.get(id=top_offer_id)
+
+    return best_offer, best_price
 
 
 @shared_task
 def dealer_showroom_offer():
     for showroom in Showroom.objects.all():
         for car_info in showroom.car_priority:
+
+            showroom_search = (
+            Q(brand__icontains=car_info.get("brand"))
+            & Q(car_model__icontains=car_info.get("car_model"))
+            )
+
             car_list = Car.objects.filter(
-                brand=car_info['brand'],
-                car_model=car_info['car_model'],
+                showroom_search,
                 showroom=None,
                 customer=None,
             )
@@ -22,43 +70,7 @@ def dealer_showroom_offer():
             if len(car_list) == 0:
                 continue
 
-            offers_with_discount = dict()
-
-            for car in car_list:
-                discount = 0
-                loyality = 0
-
-                total_deals = (
-                    DealerShowroomDeals
-                    .objects
-                    .filter(buyer=showroom, seller=car.dealer, car=car.id)
-                ).count()
-
-                loyalty_program = car.dealer.discounts.first()
-
-                if total_deals > loyalty_program.amount:
-                    loyality = loyalty_program.discount
-
-                try:
-                    discount_obj = DealerDiscountsCars.objects.get(id=car_info[0].id)
-                    if (discount_obj.dealer == car.dealer):
-                        discount = discount_obj.percent
-                except:
-                    discount = 0
-
-                total_discount = max(loyality, discount)
-                total_price = int(car.price * (100 - total_discount) / 100)
-                offers_with_discount[car.id] = total_price
-
-            best_price = min(offers_with_discount.values())
-
-            top_offer_id = 0
-            for offer in offers_with_discount:
-                if offers_with_discount[offer] == best_price:
-                    top_offer_id = offer
-                    break
-
-            best_offer = Car.objects.get(id=top_offer_id)
+            best_offer, best_price = offer_choicer(showroom, car_info, car_list)
 
             with transaction.atomic():
                 if showroom.balance >= best_price:
