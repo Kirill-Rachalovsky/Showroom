@@ -1,0 +1,68 @@
+version: "3.9"
+
+services:
+  showroom_app:
+    build: .
+    command: sh -c "
+      sleep 10 &&
+      python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/usr/src/app/
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+      - CELERY_BROKER=redis://redis:6379/0
+    depends_on:
+      - pg_db
+      - redis
+
+  pg_db:
+    image: postgres:14.0-alpine
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_DB=showroom_db
+      - POSTGRES_USER=kirill
+      - POSTGRES_PASSWORD=password1234
+
+  celery:
+    build: .
+    command: celery -A config worker -B
+    volumes:
+      - .:/usr/src/app/
+    environment:
+      - CELERY_BROKER=redis://redis:6379/0
+    depends_on:
+      - showroom_app
+
+  redis:
+    image: redis:alpine
+    command:
+      - redis-server
+    ports:
+      - "127.0.0.1:6379:6379"
+    depends_on:
+      - pg_db
+
+  flower:
+    build: .
+    command: celery -A config flower
+    ports:
+      - "5555:5555"
+    environment:
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+    depends_on:
+      - showroom_app
+      - redis
+      - celery
+
+volumes:
+  postgres_data:
+    driver: local
